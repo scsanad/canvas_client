@@ -1,0 +1,16 @@
+.vscode
+__pycache__
+
+aclab
+assignments
+moss_in
+test
+*.dll
+*.inc
+*.exe
+*.lib
+*.ipynb
+*.txt
+*.obj
+*.json
+*.xls

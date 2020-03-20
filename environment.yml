@@ -1,0 +1,11 @@
+name: canvas_api
+channels:
+  - defaults
+dependencies:
+    - jsonpickle
+    - requests
+    - pandas 
+    - pip:
+        - pyunpack
+        - xlwt
+        - xlrd
