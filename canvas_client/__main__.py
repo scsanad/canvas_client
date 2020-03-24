@@ -3,9 +3,9 @@
 import argparse
 import os
 
-from canvas-client.clinet import Client
-from canvas_client import CanvasClient
-import util
+import canvas_client
+from canvas_client.client import Client
+from canvas_client import util
 
 #TODO add progress bar
 #TODO arange the code into a package
@@ -32,7 +32,7 @@ def main():
         return
 
     if args.upload:
-        ac_grader = CanvasClient(args.lab)
+        ac_grader = Client(args.lab)
         #upload grades to canvas
         ac_grader.upload_grades_from_excel()
         return

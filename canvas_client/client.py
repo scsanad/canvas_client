@@ -11,9 +11,9 @@ import numpy as np
 import ntpath
 import unicodedata
 
-import canvas-client.util as util
-from canvas-client.submission import Submission, SubmissionAttempt
-
+import canvas_client.util as util
+from canvas_client.submission import Submission, SubmissionAttempt
+from canvas_client.canvas_api import CanvasAPI
 
 
 class Client:
@@ -142,7 +142,7 @@ class Client:
         else:
             print("Warning: {} dir contains {} files.".format(dir_path, len(zip_files))) 
 
-        return comment
+        return ""
 
 
     def upload_grades_from_excel(self):

@@ -3,9 +3,9 @@ import json
 from datetime import datetime
 import sys
 
-import util
-from submission import Submission, SubmissionAttempt, SubmissionComment
-from section import Section
+import canvas_client.util
+from canvas_client.submission import Submission, SubmissionAttempt, SubmissionComment
+from canvas_client.section import Section
 
 class Parser:
 
