@@ -9,12 +9,11 @@ README = (HERE / "README.md").read_text()
 
 # This call to setup() does all the work
 setup(
-    name="canvas-client",
+    name="canvas_client",
     version="0.0.1",
-    description="Canvas LMS client: Download submissions, upload grades and comments",
+    description="Canvas LMS client: Download submissions, upload grades and comments from excel",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="TODO",
     author="Csanad Sandor",
     author_email="scsanad@cs.ubbcluj.ro",
     license="MIT",
@@ -23,13 +22,13 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=["canvasclient"],
+    packages=["canvas_client"],
     include_package_data=True,
     install_requires=[  "jsonpickle", "requests", "pandas", \
                         "pyunpack", "xlwt", "xlrd"],
     entry_points={
         "console_scripts": [
-            "canvasclient=canvas-client.__main__:main",
+            "canvas_client=canvas_client.__main__:main",
         ]
     },
 )

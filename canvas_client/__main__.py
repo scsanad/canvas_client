@@ -8,7 +8,6 @@ from canvas_client.client import Client
 from canvas_client import util
 
 #TODO add progress bar
-#TODO arange the code into a package
 
 config = util.load_json('config.json')
 labs = list(config['labs'].keys())
