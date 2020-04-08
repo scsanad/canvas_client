@@ -39,13 +39,19 @@ class Client:
             self.assignments_dir = os.path.join(root_dir, 'assignments')
             os.mkdir(self.assignments_dir)
         
-            self.assignment_name = self.lab.upper()
-            self.assignments_dir = os.path.join(self.assignments_dir, self.assignment_name)
-            self.grades_file_name = '{}_grades.json'.format(self.assignment_name)
+        except OSError:
+            pass
 
+        try:
+            self.assignment_name = self.lab.upper()
+            self.assignments_dir = os.path.join(self.assignments_dir, self.assignment_name)            
             os.mkdir(self.assignments_dir)
         except OSError:
             pass
+        
+        self.grades_file_name = '{}_grades.json'.format(self.assignment_name)
+
+
 
 
     def download_submissions(self):
@@ -121,7 +127,7 @@ class Client:
                 comment = self._unzip_attempt(attempt.dir, submission.user_section)
                 if attempt.late:
                     seconds_late = attempt.seconds_late
-                    delay_time, grade = util.delay_to_string(seconds_late, grade)
+                    delay_time = util.delay_to_string(seconds_late)
                     comment = '{} \n\n Késés: {}'.format(comment, delay_time)
                     attempt.delay_time = delay_time # TODO this can be removed from the model
                 attempt.comment = comment
@@ -163,7 +169,7 @@ class Client:
         
 
     # TODO check the number of files
-    def _test_L(self, dir_path, user_section, warning_comment):
+    def _check_nr_files(self, dir_path, user_section, warning_comment):
         #check the number of files in the dir
         asm_files = glob.glob(os.path.join(dir_path, "*.[aA][sS][mM]"))
         if (len(asm_files) != self.lab_config['nr_files']):

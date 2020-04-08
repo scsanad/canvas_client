@@ -1,65 +1,51 @@
-# AC_grader
+# Canvas client
 A python client for grading canvas submissions.
 
 ## Setup
-1. Create a conda environment with the dependencies (conda is required): 
+1. `pip install canvas_client`
 
-    `conda env create -f environment.yml`
-2. Activate the environment:
-    
-    Linux: `source activate canvas_api`
-    
-    Windows: `activate canvas_api`
-3. Generate an access token. Open canvas2.cs.ubbcluj.ro. Go to `Settings` -> `New access token` -> copy
-4. Create a `config.json` file:
-   1. For grading AC submissions:
-    ```
-   {
-        "access_token": "<access token>",
-        "course_id": <course id here>,
-        "labs": {
-            "W1": {
-                "nr_files": <nr files>,
-                "files_to_test": <list of file names. e.g: ["L1a", "L1b", "L1c"]>,
-                "lib": <list of libraries. e.g: ["io", "mio"]>,
-                "assignment_id": <assignment id>
-            },
-            "L2": {
-                ...
+2. Generate an access token. Open canvas. Go to `Settings` -> `New access token` -> copy
+
+4. Create a config file:
+    - create an empty `config.json` file and save it in a folder where you want to downdload the submissions
+    - insert the following text into the file
+        
+            {
+                "access_token": "<access token here>",
+                "course_id": <course id here>,
+                "labs": {
+                    "<Assignemnt name (e.g. L1)>": {
+                        "assignment_id": <assignment id here>
+                    },
+                    "<Assignment name (e.g. L2)>": {
+                        "assignment_id": <assignment id here>
+                    },
+                    ...
+                }
             }
-        }
-    }
-    ```
-   1. To other courses (only to download submissions and upload grades:
-   ```
-   {
-        "access_token": "<access token here>",
-        "course_id": <course id here>,
-        "labs": {
-            "W1": {
-                "assignment_id": <assignment id here>
-            },
-            "L2": {
-                "assignment_id": <assignment id here>
-            }
-        }
-    }
-    ```
+            
+            
+        **Note**: You can find the `course id` and `assingment id` by opening the approriate assingment in canvas: 
+        ![alt text](doc/canvas_url.png)
+
+    
+
 ## Usage
 1. Download the submissions:
 
-    `python ac.py -d L1`
-
-    This command creates an `L1_grades.json` file with the comments, grades, etc.
-
-2. Test the submission with actest:
-
-    `python ac.py -t L1`
-
-    This command executes the actest on the submissions, and adds the necessary comments and grades to the `L1_grades.json`.
-
-3. To upload the grades and comments:
+    `python -m canvas_client -d <assingment name>`
     
+    e.g.:
+    
+    `python -m canvas_client -d L1`
+
+    This command downloads the submissions and creates an `L1.xls` file with the submission comments.
+
+
+2. To upload the grades and comments:
+    
+    `python ac.py -u <assingment_name>`
+    e.g.:
     `python ac.py -u L1`
 
-    This command uploads the content of the `L1_grades.json`.
+    This command uploads the content of the `L1.xls`.

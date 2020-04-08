@@ -1,15 +1,15 @@
 .vscode
 __pycache__
 
-aclab
+build
+dist
+
 assignments
-moss_in
 test
 *.dll
 *.inc
 *.exe
 *.lib
-*.ipynb
 *.txt
 *.obj
 *.json

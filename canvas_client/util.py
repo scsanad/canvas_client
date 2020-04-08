@@ -87,19 +87,17 @@ def load_json(file_path):
     return submissions
 
 
-def delay_to_string(seconds_late, grade=None):
+def delay_to_string(seconds_late):
     weeks_late = seconds_late // (7 * 24 * 3600)
     days_late = (seconds_late % (7 * 24 * 3600)) // (24 * 3600)
     hours_late = (seconds_late % (24 * 3600)) // 3600
     minutes_late = (seconds_late % (24 * 3600)) % 3600 // 60
-    if grade:
-        divider = 2 ** (weeks_late + 1) # the minimum divider is 2 since late means smaller grade
-        grade = grade // divider
+    
     delay_string = ""
     for value, unit in zip([weeks_late, days_late, hours_late, minutes_late], ["w", "d", "h", "m"]):
         if value > 0:
             delay_string += "{}{} ".format(value, unit)
-    return delay_string, grade
+    return delay_string
 
 
 def json2excel(submissions, lab_type):
@@ -122,7 +120,7 @@ def json2excel(submissions, lab_type):
         if submission.late:
             for attempt in submission.attempts:                
                 if attempt.late:
-                    current_delay, _ = delay_to_string(attempt.seconds_late) 
+                    current_delay = delay_to_string(attempt.seconds_late) 
                 else:
                     current_delay = "no delay"
                 delay += "{} - {}\n".format(attempt.nr, current_delay)
