@@ -68,13 +68,10 @@ class Client:
             # unzipp attachments
             submissions = self._unzip_subsmissions(submissions)
 
-            util.save_json(submissions, self.grades_file_name)
+            # util.save_json(submissions, self.grades_file_name)
 
             util.json2excel(submissions, self.lab)
             
-            # #TODO save results into excel file
-            # return 
-    
 
     def _download_sections(self, submissions):
         course_sections = self.canvasAPI.get_sections()
