@@ -1,5 +1,6 @@
 import unicodedata
 import shutil as shutil
+import sys
 import os
 import json
 import jsonpickle
@@ -13,6 +14,39 @@ import re
 jsonpickle.set_preferred_backend('json')
 jsonpickle.set_encoder_options('json', ensure_ascii=False, indent=4)
 
+
+
+def query_yes_no(question, default="yes"):
+    """Ask a yes/no question via raw_input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is True for "yes" or False for "no".
+    """
+    valid = {"yes": True, "y": True, "ye": True,
+             "no": False, "n": False}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' "
+                             "(or 'y' or 'n').\n")
 
 def strip_accents(text):
     """Converts hungarian charachters to english characters"""
@@ -87,19 +121,17 @@ def load_json(file_path):
     return submissions
 
 
-def delay_to_string(seconds_late, grade=None):
+def delay_to_string(seconds_late):
     weeks_late = seconds_late // (7 * 24 * 3600)
     days_late = (seconds_late % (7 * 24 * 3600)) // (24 * 3600)
     hours_late = (seconds_late % (24 * 3600)) // 3600
     minutes_late = (seconds_late % (24 * 3600)) % 3600 // 60
-    if grade:
-        divider = 2 ** (weeks_late + 1) # the minimum divider is 2 since late means smaller grade
-        grade = grade // divider
+    
     delay_string = ""
     for value, unit in zip([weeks_late, days_late, hours_late, minutes_late], ["w", "d", "h", "m"]):
         if value > 0:
             delay_string += "{}{} ".format(value, unit)
-    return delay_string, grade
+    return delay_string
 
 
 def json2excel(submissions, lab_type):
@@ -122,7 +154,7 @@ def json2excel(submissions, lab_type):
         if submission.late:
             for attempt in submission.attempts:                
                 if attempt.late:
-                    current_delay, _ = delay_to_string(attempt.seconds_late) 
+                    current_delay = delay_to_string(attempt.seconds_late) 
                 else:
                     current_delay = "no delay"
                 delay += "{} - {}\n".format(attempt.nr, current_delay)
