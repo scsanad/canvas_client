@@ -25,11 +25,14 @@ class Client:
 
         self.lab = lab
         self.lab_config = config["labs"][lab]
-        
+
+        self.server_url = config['url']        
         self.course_id = config['course_id']
         self.assignment_id = self.lab_config['assignment_id']
 
-        self.canvasAPI = CanvasAPI( course_id=self.course_id, 
+
+        self.canvasAPI = CanvasAPI( server_url=server_url,
+                                    course_id=self.course_id, 
                                     assignment_id=self.assignment_id, 
                                     access_token=access_token)
 

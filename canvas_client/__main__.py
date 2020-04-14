@@ -22,13 +22,14 @@ if not os.path.isfile(config_path):
     else:
         with open(config_path, 'w') as f:
             f.write(    '{\n' +
+                            '\t"url" : "<canvas_url>",\n'+
                             '\t"access_token" : "<acces_token>",\n'+
                             '\t"course_id" : <course_id>,\n'+
                             '\t"labs" : {\n'+
-                                '\t\t"<first_assignment_name>: {"assignment_id": <id>},\n'+
-                                '\t\t"<second_assignment_name>: {"assignment_id": <id>}\n'+
+                                '\t\t"<1st_assignment_name (choose a name)>: {"assignment_id": <id>},\n'+
+                                '\t\t"<2nd_assignment_name>: {"assignment_id": <id>}\n'+
                             '\t}\n'+
-                        '}')
+                        '}\n')
         print("Config file created. Please fill it properly.")
         exit(0)
 

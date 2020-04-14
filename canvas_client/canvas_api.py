@@ -81,12 +81,12 @@ class Parser:
 class CanvasAPI:
     '''Class to download from and upload to www.canvas2.cs.ubbcluj.ro'''
     
-    def __init__(self, course_id, assignment_id, access_token):
+    def __init__(self, server_url, course_id, assignment_id, access_token):
         
+        self.server_url = server_url
         self.course_id = course_id
         self.assignment_id = assignment_id
         
-        self.server_url = "https://canvas2.cs.ubbcluj.ro"
         self.headers = {"content-type" : "application/json"}
         self.params = {"access_token": access_token,    #access token from canvas
                         "per_page": 50}                 #nr submission per page - looks like 50 is the highest allowed value
