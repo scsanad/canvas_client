@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="canvas_client",
-    version="0.1.0",
+    version="0.1.1",
     description="Canvas LMS client: Download submissions, upload grades and comments from excel",
     long_desccription=README,
     long_description_content_type="text/markdown",
