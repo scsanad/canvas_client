@@ -1,51 +1,62 @@
 # Canvas client
 A python client for grading canvas submissions.
 
+## Install
+
+1. Make sure you have installed `pip` and `python3`
+
+2. Install the client: `pip install canvas_client`
+
 ## Setup
-1. `pip install canvas_client`
 
-2. Generate an access token. Open canvas. Go to `Settings` -> `New access token` -> copy
+1. Create and open a folder where you want to download the submissions
 
-4. Create a config file:
-    - create an empty `config.json` file and save it in a folder where you want to downdload the submissions
-    - insert the following text into the file
+2. Create a `config.json` file by running `canvas_client` in terminal (the config will be saved in the current folder)
+
+3. Fill the config properly (see the notes below):
+    
+    - e.g:
         
             {
-                "access_token": "<access token here>",
-                "course_id": <course id here>,
+                "url": "canvas.university.edu",
+                "access_token": "1234abcdef",
+                "course_id": 157,
                 "labs": {
-                    "<Assignemnt name (e.g. L1)>": {
-                        "assignment_id": <assignment id here>
+                    "L1": {
+                        "assignment_id": 1024
                     },
-                    "<Assignment name (e.g. L2)>": {
-                        "assignment_id": <assignment id here>
-                    },
-                    ...
+                    "L2": {
+                        "assignment_id": 1025
+                    }
                 }
             }
             
             
-        **Note**: You can find the `course id` and `assingment id` by opening the approriate assingment in canvas: 
+        **Note$^1$**: you can find the `course id` and `assingment id` by opening the approriate assingment in canvas: 
         ![alt text](doc/canvas_url.png)
+
+        **Note$^2$**: to get an *access token*: open canvas, go to `Your profile` -> `Settings` -> `New access token` -> `Generate Token` -> copy the value
 
     
 
 ## Usage
 1. Download the submissions:
 
-    `python -m canvas_client -d <assingment name>`
+    `canvas_client <assingment name> -d`
     
     e.g.:
     
-    `python -m canvas_client -d L1`
+    `canvas_client L1 -d`
 
-    This command downloads the submissions and creates an `L1.xls` file with the submission comments.
+    This command downloads the submissions into the `assigments` folder and creates an `L1.xls` file with the student names, comments, etc. Write the grades and comments into this file.
 
 
 2. To upload the grades and comments:
     
-    `python ac.py -u <assingment_name>`
+    `canvas_client <assingment_name> -u`
     e.g.:
-    `python ac.py -u L1`
+    `canvas_client L1 -u`
 
-    This command uploads the content of the `L1.xls`.
+    This command uploads the content of the `L1.xls`
+
+    **Note**: the grades will appear on canvas after 10-15 seconds (refresh the page if necessary)
