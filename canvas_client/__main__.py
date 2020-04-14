@@ -3,7 +3,6 @@
 import argparse
 import os
 from configparser import ConfigParser
-from importlib import resources
 
 from canvas_client.client import Client
 from canvas_client import util
@@ -11,9 +10,7 @@ from canvas_client import util
 #TODO add progress bar
 
 
-cfg = ConfigParser()
-cfg.read_string(resources.read_text("canvas_client", "config.txt"))
-config_path = os.path.join("./", cfg.get("config", "config_name"))
+config_path = os.path.join(".", "config.json")
 if not os.path.isfile(config_path):
     
     init = util.query_yes_no(   "No config file found in the current folder.\n" +\
