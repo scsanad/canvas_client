@@ -31,7 +31,7 @@ class Client:
         self.assignment_id = self.lab_config['assignment_id']
 
 
-        self.canvasAPI = CanvasAPI( server_url=server_url,
+        self.canvasAPI = CanvasAPI( server_url=self.server_url,
                                     course_id=self.course_id, 
                                     assignment_id=self.assignment_id, 
                                     access_token=access_token)
