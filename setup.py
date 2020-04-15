@@ -11,7 +11,7 @@ with open(os.path.join(HERE, "README.md")) as fid:
 # This call to setup() does all the work
 setup(
     name="canvas_client",
-    version="0.1.1",
+    version="0.1.2",
     description="Canvas LMS client: Download submissions, upload grades and comments from excel",
     long_description=README,
     long_description_content_type="text/markdown",
