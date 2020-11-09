@@ -5,12 +5,11 @@ class Submission(object):
         self.user_section = user_section
         self.user_comments = user_comments
         self.late = late
-        self.attempts = attempts
-            
+        self.attempts = attempts        
+
 
 class SubmissionAttempt(object):
-    def __init__(   self, nr, late, submitted_at, seconds_late, 
-                    attachment_name, attachment_url, attachment_path=None,
+    def __init__(   self, nr, late, submitted_at, seconds_late, attachments,
                     comment=None, grade=None, dir=None, delay_time=None):
         self.nr = nr
         self.dir = dir
@@ -20,10 +19,15 @@ class SubmissionAttempt(object):
         self.delay_time = delay_time
         self.comment = comment
         self.grade = grade
-        self.attachment_name = attachment_name
-        self.attachment_url = attachment_url
-        self.attachment_path = attachment_path
+        self.attachments = attachments
 
+
+class SubmissionAttachment(object):
+    def __init__(   self, attachment_name, attachment_url, attachment_path=None):
+        self.attachment_name = attachment_name
+        self.attachment_path = attachment_path
+        self.attachment_url = attachment_url
+        
 
 class SubmissionComment(object):
     def __init__(self, comment, author_name, created_at):
