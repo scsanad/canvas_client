@@ -4,7 +4,7 @@ from datetime import datetime
 import sys
 
 import canvas_client.util
-from canvas_client.submission import Submission, SubmissionAttempt, SubmissionComment
+from canvas_client.submission import Submission, SubmissionAttempt, SubmissionComment, SubmissionAttachment
 from canvas_client.section import Section
 
 class Parser:
@@ -56,13 +56,19 @@ class Parser:
         try:
             submitted_at = datetime.strptime(   attempt_dict['submitted_at'], 
                                                 '%Y-%m-%dT%H:%M:%SZ')
+
+            attachments = []
+
+            for attachment in attempt_dict['attachments']:
+                attachments.append(
+                    SubmissionAttachment( attachment_name=attachment['display_name'], 
+                                          attachment_url=attachment['url']))
+
             submission_attempt = SubmissionAttempt( nr=attempt_dict['attempt'],
                                                     late=attempt_dict['late'],
                                                     submitted_at=submitted_at.strftime("%Y-%m-%d %H:%M:%S"),
                                                     seconds_late=attempt_dict['seconds_late'],
-                                                    attachment_name=attempt_dict['attachments'][0]['display_name'],
-                                                    attachment_url=attempt_dict['attachments'][0]['url'])
-                                                    #TODO handle more than one atachment
+                                                    attachments=attachments)
         except KeyError as error:
             raise Exception('No {} in attempts.'.format(error))
         return submission_attempt
