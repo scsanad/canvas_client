@@ -104,17 +104,18 @@ class Client:
             for attempt in submission.attempts:
                 attempt.dir = os.path.join(user_dir, 'attempt_' + str(attempt.nr))
                 
-                #TODO - could be more attachments - files in a submission   
-                attachment_path = os.path.join(attempt.dir, attempt.attachment_name)
-                attempt.attachment_path = attachment_path
-                #if the file is not already downloaded
-                if not os.path.isfile(attachment_path):
-                    try:
-                        os.mkdir(attempt.dir)
-                        raw_attachment = self.canvasAPI.download_submission_attachment(attempt.attachment_url)
-                        util.save_raw_file(attachment_path, raw_attachment)
-                    except OSError:
-                        pass
+                try:
+                    os.mkdir(attempt.dir)
+
+                    for attachment in attempt.attachments:
+                        attachment_path = os.path.join(attempt.dir, attachment.attachment_name)
+                        attachment.attachment_path = attachment_path
+                        #if the file is not already downloaded
+                        if not os.path.isfile(attachment_path):
+                            raw_attachment = self.canvasAPI.download_submission_attachment(attachment.attachment_url)
+                            util.save_raw_file(attachment_path, raw_attachment)
+                except OSError:
+                    pass
             
         return submissions
 
