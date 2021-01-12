@@ -79,7 +79,7 @@ def gather_last_attempts(submissions_file, lab, files2copy, dest_dir):
             os.mkdir(dir_name)
         except OSError:
             print(dest_dir + " already exists!")
-        
+
     for submission in submissions:
         attempts = submission.attempts
         attempt_dir = attempts[-1].dir
@@ -92,7 +92,7 @@ def gather_last_attempts(submissions_file, lab, files2copy, dest_dir):
             for f in files:
                 file_path = os.path.join(attempt_dir, f)
                 shutil.copy(file_path, os.path.join(dest_dir, "{}_{}".format(lab, file_name), "{}_{}".format(strip_accents(submission.user_name.replace(" ", "_")), f)))
-                
+
 
 def save_raw_file(path, raw_file):
     with open(path, 'wb') as f:
@@ -106,7 +106,7 @@ def unpack_file(file_path, destination_dir):
             Archive(file_path).extractall(destination_dir)
         except Exception as err:
             return 'Nem lehet kicsomagolni a {} fájlt: {}'.format(file_path, err)
-    else: 
+    else:
         return "A feltöltött állomány .zip vagy .rar kiterjesztésű kell legyen!"
     return None
 
@@ -126,7 +126,7 @@ def delay_to_string(seconds_late):
     days_late = (seconds_late % (7 * 24 * 3600)) // (24 * 3600)
     hours_late = (seconds_late % (24 * 3600)) // 3600
     minutes_late = (seconds_late % (24 * 3600)) % 3600 // 60
-    
+
     delay_string = ""
     for value, unit in zip([weeks_late, days_late, hours_late, minutes_late], ["w", "d", "h", "m"]):
         if value > 0:
@@ -144,7 +144,7 @@ def json2excel(submissions, lab_type):
         current_grade = ""
         current_comment = ""
         #get previous comments
-        if len(submission.user_comments) > 0:   
+        if len(submission.user_comments) > 0:
             for comment in submission.user_comments:
                 prev_comments += "{}:\n\t{}".format( comment.author_name,
                                                 '\n\t'.join(textwrap.wrap(comment.comment, 100)))
@@ -152,9 +152,9 @@ def json2excel(submissions, lab_type):
             prev_comments = prev_comments[:-len('\n')]
         #get delay value of attempts
         if submission.late:
-            for attempt in submission.attempts:                
+            for attempt in submission.attempts:
                 if attempt.late:
-                    current_delay = delay_to_string(attempt.seconds_late) 
+                    current_delay = delay_to_string(attempt.seconds_late)
                 else:
                     current_delay = "no delay"
                 delay += "{} - {}\n".format(attempt.nr, current_delay)
@@ -163,7 +163,7 @@ def json2excel(submissions, lab_type):
         if len(submission.attempts) > 1:
             for attempt in submission.attempts[:-1]:
                 prev_grades += "{} - {}\n".format(attempt.nr, attempt.grade)
-        
+
         #get current grade and comment if the last attempt is already graded - assign "" else
         last_attempt = submission.attempts[-1]
         current_grade = last_attempt.grade if last_attempt.grade is not None else ""
@@ -171,7 +171,7 @@ def json2excel(submissions, lab_type):
         current_comment = re.sub(r"[(\n) ]*$", "", current_comment)         #remove newline from the end
         current_comment = re.sub(r" {2, }", " ", current_comment)       #remove multiple spaces
         current_comment = re.sub(r"[(\n) ]{2,}", "\n", current_comment) #remove unnecessary spaces
-        data.append((submission.user_id, 
+        data.append((submission.user_id,
                     submission.user_name,
                     submission.user_section,
                     delay,              #delay of attemps
@@ -182,3 +182,33 @@ def json2excel(submissions, lab_type):
 
     df = pd.DataFrame(data, columns=columns)
     df.to_excel(lab_type + ".xls")
+
+def copy_all(src, dest, regex = "", prefix = ""):
+    src_files = os.listdir(src)
+    count = 0
+    for file_name in src_files:
+        full_file_name = os.path.join(src, file_name)
+        if os.path.isfile(full_file_name) and (re.search(regex, full_file_name) is not None):
+            dest_file_name = os.path.join(dest, prefix + file_name)
+            if not os.path.exists(dest_file_name):
+                shutil.copy(full_file_name, dest_file_name)
+                count += 1
+    return count
+
+def copy_submissions(src, dest, regex):
+    cwd = src
+    try:
+        os.mkdir(dest)
+    except OSError:
+        pass
+    students = [ student for student in os.listdir(cwd) if os.path.isdir(os.path.join(cwd, student)) ]
+    for student in students:
+        swd = os.path.join(cwd, student)
+        attempts = [ attempt for attempt in os.listdir(swd) if os.path.isdir(os.path.join(swd, attempt)) ]
+        if len(attempts) == 0:
+            print(f"Warning: No attempt found for {student}")
+            continue
+        attempt = attempts[-1:][0]
+        awd = os.path.join(swd, attempt)
+        if copy_all(awd, dest, regex, f"{student}_") == 0:
+            print(f"Warning: No file(s) copied for {student}")
