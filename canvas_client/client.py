@@ -153,7 +153,7 @@ class Client:
 
 
     def upload_grades_from_excel(self):
-        grades_df = pd.read_excel("{}.xls".format(self.lab.upper()))
+        grades_df = pd.read_excel("{}.xlsx".format(self.lab.upper()))
         grades_df = grades_df.replace(np.nan, "", regex=True)
         graded_submissions = []
         for _, row in grades_df.iterrows():
