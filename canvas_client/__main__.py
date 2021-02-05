@@ -61,7 +61,7 @@ def main():
     if args.upload:
         ac_grader.upload_grades_from_excel()
     if args.moss is not None:
-        moss_dir = f"{ac_grader.assignments_dir} MOSS"
+        moss_dir = f"{ac_grader.assignments_dir}_MOSS"
         util.copy_submissions(ac_grader.assignments_dir, moss_dir, args.moss)
 
 if __name__ == "__main__":
