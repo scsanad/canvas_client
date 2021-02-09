@@ -53,16 +53,16 @@ def main():
     if sum([ args.all, args.download, args.upload, (args.moss is not None) ]) != 1:
         print("Please select only one optional argument.")
         return
-    ac_grader = Client(args.lab)
+    client = Client(args.lab)
     if args.all:
-        ac_grader.download_submissions(workflow_state = [ 'submitted', 'graded' ])
+        client.download_submissions(workflow_state = ( 'submitted', 'graded' ))
     if args.download:
-        ac_grader.download_submissions(workflow_state = [ 'submitted' ])
+        client.download_submissions(workflow_state = ( 'submitted' ))
     if args.upload:
-        ac_grader.upload_grades_from_excel()
+        client.upload_grades_from_excel()
     if args.moss is not None:
-        moss_dir = f"{ac_grader.assignments_dir}_MOSS"
-        util.copy_submissions(ac_grader.assignments_dir, moss_dir, args.moss)
+        moss_dir = f"{client.assignments_dir}_MOSS"
+        util.copy_submissions(client.assignments_dir, moss_dir, args.moss)
 
 if __name__ == "__main__":
     main()

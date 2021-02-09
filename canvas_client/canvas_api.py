@@ -38,7 +38,7 @@ class Parser:
                                     late=submission_dict['late'],
                                     attempts=submission_attempts)
         except Exception as error:
-            print("Warning. Problem during processing data of {}: {}. This person will not be graded.".format(user['name'], error))
+            print("Warning. Problem during processing data of {}: {}. Cannot download the submission. Please grade this student on canvas.".format(user['name'], error))
             return None
         return submission
 
@@ -124,7 +124,7 @@ class CanvasAPI:
         return assignment
 
 
-    def get_list_of_submissions(self, workflow_state = [ 'submitted' ]):
+    def get_list_of_submissions(self, workflow_state = ( 'submitted' )):
         """ workflow_state: { submitted, unsubmitted, graded } """
 
         params = self.params.copy()

@@ -84,7 +84,11 @@ class Client:
                 students[student] = section.name
 
         for submission in submissions:
-            submission.user_section = students[submission.user_name]
+            try:
+                submission.user_section = students[submission.user_name]
+            except KeyError:
+                # The "Test Student" is not included into the sections student list
+                submission.user_section = "No section"
         return submissions
 
 
@@ -138,19 +142,21 @@ class Client:
     def _unzip_attempt(self, dir_path, user_section):
         # unzip the file
         files = os.listdir(dir_path)
-        zip_files = list(filter(lambda x: x.lower().endswith('.zip') or x.lower().endswith('.rar'), files))
+        packed_files = list(filter(lambda x: x.lower().endswith('.zip') or x.lower().endswith('.rar'), files))
 
-        if len(zip_files) == 1:
-            attachment_path = os.path.join(dir_path, zip_files[0])
+        if len(packed_files) != 1:
+            print("Warning: {} dir contains {} zip files.".format(dir_path, len(packed_files)))
+            print("Unpacking all")
+        
+        comment = ""
+        for packed_file in packed_files:
+            attachment_path = os.path.join(dir_path, packed_file)
             err = util.unpack_file(attachment_path, dir_path)
             if err:
-                comment = err
-                return comment
-        else:
-            print("Warning: {} dir contains {} files.".format(dir_path, len(zip_files)))
-
-        return ""
-
+                comment += "Problem during unpacking file {}: {}\n".format(packed_file, err)
+        
+        return comment
+        
 
     def upload_grades_from_excel(self):
         grades_df = pd.read_excel("{}.xlsx".format(self.lab.upper()))
@@ -167,15 +173,3 @@ class Client:
                                             [graded_attempt])
             graded_submissions.append(graded_submission)
         self.canvasAPI.upload_grades_from_submissions(graded_submissions)
-
-
-    # TODO check the number of files
-    def _check_nr_files(self, dir_path, user_section, warning_comment):
-        #check the number of files in the dir
-        asm_files = glob.glob(os.path.join(dir_path, "*.[aA][sS][mM]"))
-        if (len(asm_files) != self.lab_config['nr_files']):
-            comment = "A feltöltött feladat {} asm fájlt kell tartalmazzon. Ez a feltöltés {} fájlt tartalmaz"\
-                        .format(self.lab_config['nr_files'], len(asm_files))
-            grade = -10
-            comment = comment + warning_comment
-            return grade, comment
