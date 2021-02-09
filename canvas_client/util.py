@@ -181,7 +181,7 @@ def json2excel(submissions, lab_type):
                     prev_comments))     #previous comments
 
     df = pd.DataFrame(data, columns=columns)
-    df.to_excel(lab_type + ".xls")
+    df.to_excel(lab_type + ".xlsx")
 
 def copy_all(src, dest, regex = "", prefix = ""):
     src_files = os.listdir(src)
