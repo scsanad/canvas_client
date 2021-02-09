@@ -84,7 +84,11 @@ class Client:
                 students[student] = section.name
 
         for submission in submissions:
-            submission.user_section = students[submission.user_name]
+            try:
+                submission.user_section = students[submission.user_name]
+            except KeyError:
+                # The "Test Student" is not included into the sections student list
+                submission.user_section = "No section"
         return submissions
 
 
