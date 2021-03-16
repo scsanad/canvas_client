@@ -163,7 +163,7 @@ class Client:
         grades_df = grades_df.replace(np.nan, "", regex=True)
         graded_submissions = []
         for _, row in grades_df.iterrows():
-            graded_attempt = SubmissionAttempt( None, None, None, None, None,
+            graded_attempt = SubmissionAttempt( None, None, None, None,
                                                 None, comment=row['current comment'],
                                                 grade=row['current grade'])
             graded_submission = Submission( row['ID'],
