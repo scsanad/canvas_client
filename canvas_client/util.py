@@ -162,7 +162,7 @@ def json2excel(submissions, lab_type):
 
         #get current grade and comment if the last attempt is already graded - assign "" else
         last_attempt = submission.attempts[-1]
-        prev_grade = int(last_attempt.grade) if last_attempt.grade is not None else ""
+        prev_grade = float(last_attempt.grade) if last_attempt.grade is not None else ""
         current_grade = ""
         current_comment = last_attempt.comment if last_attempt.comment is not None else ""
         current_comment = re.sub(r"[(\n) ]*$", "", current_comment)         #remove newline from the end
