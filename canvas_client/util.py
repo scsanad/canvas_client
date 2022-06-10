@@ -2,7 +2,6 @@ import unicodedata
 import shutil as shutil
 import sys
 import os
-import json
 import jsonpickle
 import codecs
 from pyunpack import Archive
@@ -13,7 +12,6 @@ import re
 
 jsonpickle.set_preferred_backend('json')
 jsonpickle.set_encoder_options('json', ensure_ascii=False, indent=4)
-
 
 
 def query_yes_no(question, default="yes"):
@@ -161,13 +159,16 @@ def json2excel(submissions, lab_type):
             delay = delay[:-len('\n')]
 
         #get current grade and comment if the last attempt is already graded - assign "" else
-        last_attempt = submission.attempts[-1]
-        prev_grade = float(last_attempt.grade) if last_attempt.grade is not None else ""
-        current_grade = ""
-        current_comment = last_attempt.comment if last_attempt.comment is not None else ""
-        current_comment = re.sub(r"[(\n) ]*$", "", current_comment)         #remove newline from the end
-        current_comment = re.sub(r" {2, }", " ", current_comment)       #remove multiple spaces
-        current_comment = re.sub(r"[(\n) ]{2,}", "\n", current_comment) #remove unnecessary spaces
+        if len(submission.attempts) > 0:
+            last_attempt = submission.attempts[-1]
+            prev_grade = float(last_attempt.grade) if last_attempt.grade is not None else ""
+            current_grade = ""
+            current_comment = last_attempt.comment if last_attempt.comment is not None else ""
+            current_comment = re.sub(r"[(\n) ]*$", "", current_comment)         #remove newline from the end
+            current_comment = re.sub(r" {2, }", " ", current_comment)       #remove multiple spaces
+            current_comment = re.sub(r"[(\n) ]{2,}", "\n", current_comment) #remove unnecessary spaces
+        else:
+            delay = "no submission"
         data.append((submission.user_id,
                     submission.user_name,
                     submission.user_section,

@@ -3,9 +3,8 @@ import json
 from datetime import datetime
 import sys
 
-import canvas_client.util
-from canvas_client.submission import Submission, SubmissionAttempt, SubmissionComment, SubmissionAttachment
-from canvas_client.section import Section
+from submission import Submission, SubmissionAttempt, SubmissionComment, SubmissionAttachment
+from section import Section
 
 class Parser:
 
@@ -29,8 +28,9 @@ class Parser:
         try:
             submission_attempts = []
             for attempt in submission_dict['submission_history']:
-                submission_attempt = Parser.submission_attempt_from_dict(attempt)
-                submission_attempts.append(submission_attempt)
+                if attempt['workflow_state'] in ("submitted", "graded"):
+                    submission_attempt = Parser.submission_attempt_from_dict(attempt)
+                    submission_attempts.append(submission_attempt)
 
             submission = Submission(user_id=user['id'],
                                     user_name=user['name'],
@@ -127,7 +127,6 @@ class CanvasAPI:
 
     def get_list_of_submissions(self, workflow_state = ( 'submitted' )):
         """ workflow_state: { submitted, unsubmitted, graded } """
-
         params = self.params.copy()
         params['include[]'] = ['submission_comments', 'submission_history', 'group','user']
 

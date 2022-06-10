@@ -1,19 +1,11 @@
-import subprocess
+
 import os
-import glob
-import json
-import re
-import requests
-import shutil
-import sys
 import pandas as pd
 import numpy as np
-import ntpath
-import unicodedata
 
-import canvas_client.util as util
-from canvas_client.submission import Submission, SubmissionAttempt
-from canvas_client.canvas_api import CanvasAPI
+import util
+from submission import Submission, SubmissionAttempt
+from canvas_api import CanvasAPI
 
 
 class Client:
@@ -53,8 +45,6 @@ class Client:
             pass
 
         self.grades_file_name = '{}_grades.json'.format(self.assignment_name)
-
-
 
 
     def download_submissions(self, workflow_state):
