@@ -135,10 +135,11 @@ def delay_to_string(seconds_late):
 
 
 def json2excel(submissions, lab_type):
-    columns=['ID', 'name', 'section', 'delay', 'current grade', 'current comment', 'prev_comments']
+    columns=['ID', 'name', 'section', 'delay', 'current grade', 'current comment', 'prev grade', 'prevcomments']
     data = []
     for submission in submissions:
         delay = ""
+        prev_grade = ""
         prev_comments = ""
         current_grade = ""
         current_comment = ""
@@ -161,7 +162,8 @@ def json2excel(submissions, lab_type):
 
         #get current grade and comment if the last attempt is already graded - assign "" else
         last_attempt = submission.attempts[-1]
-        current_grade = last_attempt.grade if last_attempt.grade is not None else ""
+        prev_grade = float(last_attempt.grade) if last_attempt.grade is not None else ""
+        current_grade = ""
         current_comment = last_attempt.comment if last_attempt.comment is not None else ""
         current_comment = re.sub(r"[(\n) ]*$", "", current_comment)         #remove newline from the end
         current_comment = re.sub(r" {2, }", " ", current_comment)       #remove multiple spaces
@@ -172,6 +174,7 @@ def json2excel(submissions, lab_type):
                     delay,              #delay of attemps
                     current_grade,      #grade
                     current_comment,    #your comment
+                    prev_grade,         #previous grade
                     prev_comments))     #previous comments
 
     df = pd.DataFrame(data, columns=columns)

@@ -68,6 +68,7 @@ class Parser:
                                                     late=attempt_dict['late'],
                                                     submitted_at=submitted_at.strftime("%Y-%m-%d %H:%M:%S"),
                                                     seconds_late=attempt_dict['seconds_late'],
+                                                    grade=attempt_dict['grade'],
                                                     attachments=attachments)
         except KeyError as error:
             raise Exception('No {} in attempts.'.format(error))
